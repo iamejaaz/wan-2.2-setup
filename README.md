@@ -169,12 +169,12 @@ Version 3 uses the original precision files. They go in `ComfyUI/models/diffusio
 
 | File | Size | Link |
 |---|---|---|
-| Original, high noise half (fp16) | about 28 GB | [wan2.2_i2v_high_noise_14B_fp16.safetensors](https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp16.safetensors) |
-| Original, low noise half (fp16) | about 28 GB | [wan2.2_i2v_low_noise_14B_fp16.safetensors](https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp16.safetensors) |
+| Original, high noise half (fp16) | 28.6 GB | [wan2.2_i2v_high_noise_14B_fp16.safetensors](https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp16.safetensors) |
+| Original, low noise half (fp16) | 28.6 GB | [wan2.2_i2v_low_noise_14B_fp16.safetensors](https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp16.safetensors) |
 
 In between sizes, if the original does not fit your card:
 
-- fp8 scaled, about 14 GB per half: [high](https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors), [low](https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors). Change the two file names in the pure original workflow.
+- fp8 scaled, 14.3 GB per half: [high](https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors), [low](https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors). Change the two file names in the pure original workflow.
 - Q8 GGUF, 15.4 GB per half: [all sizes](https://huggingface.co/QuantStack/Wan2.2-I2V-A14B-GGUF/tree/main). Change the two file names in the pure Q4 workflow.
 
 You can also mix: the Lightning LoRA works on the original files too. Add the two LoRA steps from the optimized workflow and use its settings.
