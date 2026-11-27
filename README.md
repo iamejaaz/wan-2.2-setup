@@ -2,12 +2,13 @@
 
 Turn one picture and one line of text into a 5 second video clip with the free Wan 2.2 model, on your own computer. No account, no credits, no cloud.
 
-This is the exact setup we run, with every download link, the settings, and the times we measured. It works with or without a graphics card. Without one it is slow, and the numbers below say how slow.
+This is the exact setup we run, with every download link, the settings and example prompts.
 
 ## More to read
 
 - [How an AI turns one picture into a video](docs/how-image-to-video-works.md): the mechanism and what each speed trick costs.
-- [Lessons learned](docs/lessons-learned.md): every number we measured, what failed, what to try first.
+- [Example prompts](docs/example-prompts.md): how to write a prompt, with ready examples.
+- [Lessons learned](docs/lessons-learned.md): our test notes and numbers, what failed, what to try first.
 - [AGENTS.md](AGENTS.md): a short entry point for AI agents.
 
 ## How it works
@@ -35,38 +36,30 @@ There are three versions here. All use the same Wan 2.2 14B model. Pick by what 
 | What it is | Q4 files plus the Lightning LoRA | Q4 files, no speed-up add-on | Full original files, no speed-up add-on |
 | Steps | 4 | 20 | 20 |
 | Download | 26 GB | 24 GB | 62 GB |
-| Works with no graphics card | yes, slow | too slow to be useful | no |
 | Graphics memory needed | 12 GB or more | 12 GB or more | 24 GB or more |
 | Quality | very good | a little more natural motion | the reference: best motion and detail |
 | Tested by us | yes | no | no |
 | Download command | `bash download.sh optimized` | `bash download.sh pure-q4` | `bash download.sh pure-original` |
 | Workflow file | `workflows/optimized_q4_lightning_4steps_832x480.json` | `workflows/pure_q4_20steps_832x480.json` | `workflows/pure_original_fp16_20steps_832x480.json` |
 
-What "pure" means: the model runs the way it was released, 20 steps with cfg 3.5, with no Lightning LoRA. The speed-up LoRA saves about 10 times the work, and the cost is slightly slower, softer motion. The pure settings (20 steps, cfg 3.5, shift 8, 10 steps on each half) come from ComfyUI's stock Wan 2.2 template. We have not run versions 2 and 3 ourselves, because our machine has no graphics card.
+What "pure" means: the model runs the way it was released, 20 steps with cfg 3.5, with no Lightning LoRA. The speed-up LoRA saves about 10 times the work, and the cost is slightly slower, softer motion. The pure settings (20 steps, cfg 3.5, shift 8, 10 steps on each half) come from ComfyUI's stock Wan 2.2 template. We have not run versions 2 and 3 ourselves.
 
 `bash download.sh all` gets everything, so you can switch between them.
 
-### What we measured with the optimized version
-
-Our machine: 8 CPU cores (AMD EPYC), 31 GB RAM, no graphics card.
+### Picture size
 
 | | Best quality | Fast preview |
 |---|---|---|
 | Size | 832x480, 81 frames (5 s) | 480x272, 81 frames (5 s), enlarged after |
-| Time | 11 h 53 min | about 2 h 20 min |
-| Peak memory | 25.9 GB | about 20 GB |
 | Result | clean face, smooth motion, good light and glow | motion can stall for a moment, glow and light rays are lost |
 | Workflow file | `optimized_q4_lightning_4steps_832x480.json` | `optimized_q4_lightning_4steps_480x272.json` |
 
-Both rows use the same model. The only difference is the size it draws at. The model was trained at 480p and 720p, so going far below that hurts motion and light. If you care about the result, use 832x480.
-
-With an NVIDIA card the same files run many times faster. We have not measured that.
+The model was trained at 480p and 720p, so going far below that hurts motion and light. If you care about the result, use 832x480.
 
 ## What you need
 
 - Free disk: 30 GB for the optimized version, 70 GB for the original files.
-- No graphics card: 32 GB RAM for 832x480, and patience.
-- NVIDIA card: 12 GB of graphics memory or more is comfortable for these files.
+- An NVIDIA graphics card. 12 GB of graphics memory or more is comfortable for the optimized version.
 - Python 3.10 or newer, and git.
 
 ## Setup
@@ -88,7 +81,7 @@ cd ../..
 - [ComfyUI](https://github.com/comfyanonymous/ComfyUI) is the program that runs the model.
 - [ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF) loads the smaller `.gguf` files. Required.
 - [ComfyUI-Frame-Interpolation](https://github.com/Fannovel16/ComfyUI-Frame-Interpolation) adds in-between frames. Optional.
-- With an NVIDIA card, install the CUDA build of PyTorch before `pip install -r requirements.txt`: https://pytorch.org/get-started/locally/
+- Install the CUDA build of PyTorch before `pip install -r requirements.txt`: https://pytorch.org/get-started/locally/
 
 Versions we run: ComfyUI `ef50715`, ComfyUI-GGUF `6ea2651`, ComfyUI-Frame-Interpolation `26545cc`.
 
@@ -123,19 +116,11 @@ The script can be stopped and started again. It skips files that are already the
 
 ### 3. Start ComfyUI
 
-With an NVIDIA card:
-
 ```bash
 cd ComfyUI && source venv/bin/activate && python main.py
 ```
 
-With no graphics card:
-
-```bash
-cd ComfyUI && source venv/bin/activate && python main.py --cpu --cache-none --disable-smart-memory --use-pytorch-cross-attention
-```
-
-`--use-pytorch-cross-attention` matters on CPU. In our tests it made each step 27% faster (1,164 s against 1,589 s at 480x272, 81 frames) and cut memory use. Changing the number of threads did not help.
+Then open http://127.0.0.1:8188 in the browser.
 
 ### 4. Make a clip
 
@@ -165,7 +150,7 @@ Optimized version:
 
 Pure versions: 20 steps (0 to 10 on the high noise half, 10 to 20 on the low noise half), cfg 3.5, shift 8, no LoRA. Everything else is the same.
 
-Writing the prompt: say who is in the picture, what they do, how the camera moves, and the light. One action per clip.
+Writing the prompt: say who is in the picture, what they do, how the camera moves, and the light. One action per clip. See [example prompts](docs/example-prompts.md).
 
 ## Files for the pure versions
 
@@ -191,7 +176,6 @@ The model's own page: https://huggingface.co/Wan-AI/Wan2.2-I2V-A14B
 
 - **The small 5B model** (Wan 2.2 TI2V 5B): 59 minutes for the same clip, but the face drifts and the colours are worse.
 - **Half the frames, then filling in frames**: fast, but the result is slow motion.
-- **Fewer threads, pinned cores, split attention**: no gain. Split attention ran out of memory at 81 frames.
 
 ## Credits
 
