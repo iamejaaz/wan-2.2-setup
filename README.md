@@ -4,6 +4,12 @@ Turn one picture and one line of text into a 5 second video clip with the free W
 
 This is the exact setup we run, with every download link, the settings, and the times we measured. It works with or without a graphics card. Without one it is slow, and the numbers below say how slow.
 
+## More to read
+
+- [How an AI turns one picture into a video](docs/how-image-to-video-works.md): the mechanism and what each speed trick costs.
+- [Lessons learned](docs/lessons-learned.md): every number we measured, what failed, what to try first.
+- [AGENTS.md](AGENTS.md): a short entry point for AI agents.
+
 ## How it works
 
 Wan 2.2 is a video model released for free by Alibaba. You give it a start picture and a prompt. It writes the next frames.
